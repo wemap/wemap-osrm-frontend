@@ -22,8 +22,8 @@ var itineraryBuilder = require('./itinerary_builder')(mergedOptions.language);
 
 var mapLayer = leafletOptions.layer;
 var overlay = leafletOptions.overlay;
-var baselayer = ls.get('layer') ? mapLayer[0][ls.get('layer')] : mapLayer[0]['Mapbox Streets'];
-var layers = ls.get('getOverlay') && [baselayer, overlay['Small Components']] || baselayer;
+var baselayer = ls.get('layer') ? mapLayer[0][ls.get('layer')] : mapLayer[0]['standard'];
+var layers = ls.get('getOverlay') && [baselayer, overlay['hiking']] || baselayer;
 var map = L.map('map', {
   zoomControl: true,
   dragging: true,
@@ -145,6 +145,7 @@ var controlOptions = {
   showAlternatives: options.lrm.showAlternatives,
   units: mergedOptions.units,
   serviceUrl: leafletOptions.services[0].path,
+  services: leafletOptions.services,
   useZoomParameter: options.lrm.useZoomParameter,
   routeDragInterval: options.lrm.routeDragInterval,
   collapsible: options.lrm.collapsible

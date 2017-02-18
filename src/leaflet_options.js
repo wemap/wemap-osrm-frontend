@@ -2,51 +2,48 @@
 
 var L = require('leaflet');
 
-var streets = L.tileLayer('https://api.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}@2x.png?access_token=pk.eyJ1IjoibXNsZWUiLCJhIjoiclpiTWV5SSJ9.P_h8r37vD8jpIH1A6i1VRg', {
-    attribution: '<a href="https://www.mapbox.com/about/maps">© Mapbox</a> <a href="https://openstreetmap.org/copyright">© OpenStreetMap</a> | <a href="https://mapbox.com/map-feedback/">Improve this map</a>'
+var standard = L.tileLayer('//{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png', {
+    attribution: 'Map data © OpenStreetMap contributors under <a ref="http://www.openstreetmap.org/copyright">ODbL</a>'
   }),
-  outdoors = L.tileLayer('https://api.mapbox.com/v4/mapbox.outdoors/{z}/{x}/{y}@2x.png?access_token=pk.eyJ1IjoibXNsZWUiLCJhIjoiclpiTWV5SSJ9.P_h8r37vD8jpIH1A6i1VRg', {
-    attribution: '<a href="https://www.mapbox.com/about/maps">© Mapbox</a> <a href="https://openstreetmap.org/copyright">© OpenStreetMap</a> | <a href="https://mapbox.com/map-feedback/">Improve this map</a>'
-  }),
-  satellite = L.tileLayer('https://api.mapbox.com/v4/mapbox.streets-satellite/{z}/{x}/{y}@2x.png?access_token=pk.eyJ1IjoibXNsZWUiLCJhIjoiclpiTWV5SSJ9.P_h8r37vD8jpIH1A6i1VRg', {
-    attribution: '<a href="https://www.mapbox.com/about/maps">© Mapbox</a> <a href="https://openstreetmap.org/copyright">© OpenStreetMap</a> | <a href="https://mapbox.com/map-feedback/">Improve this map</a>'
-  }),
-  osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© <a href="https://www.openstreetmap.org/copyright/en">OpenStreetMap</a> contributors'
-  }),
-  osm_de = L.tileLayer('https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png', {
-    attribution: '© <a href="https://www.openstreetmap.org/copyright/en">OpenStreetMap</a> contributors'
-  }),
-  small_components = L.tileLayer('https://tools.geofabrik.de/osmi/tiles/routing_i/{z}/{x}/{y}.png', {});
+  hiking = L.tileLayer('//tile.waymarkedtrails.org/hiking/{z}/{x}/{y}.png', {}),
+  bike = L.tileLayer('//tile.waymarkedtrails.org/cycling/{z}/{x}/{y}.png', {})
 
 module.exports = {
   defaultState: {
-    center: L.latLng(38.8995, -77.0269),
-    zoom: 13,
+    center: L.latLng(50, 12),
+    zoom: 7,
     waypoints: [],
     language: 'en',
     alternative: 0,
-    layer: streets
+    layer: standard,
+    service: 1
   },
   services: [{
-    label: 'Car (fastest)',
-    path: 'https://router.project-osrm.org/route/v1'
+    label: 'Car',
+    path: '/routed-car/route/v1',
+    debug: 'car',
+    fixspeed: 0
+  },
+  {
+    label: 'Bike',
+    path: '/routed-bike/route/v1',
+    debug: 'bike',
+    fixspeed: 18
+  },
+  {
+    label: 'Foot',
+    path: '/routed-foot/route/v1',
+    debug: 'foot',
+    fixspeed: 4.5
   }],
   layer: [{
-    'Mapbox Streets': streets,
-    'Mapbox Outdoors': outdoors,
-    'Mapbox Streets Satellite': satellite,
-    'openstreetmap.org': osm,
-    'openstreetmap.de.org': osm_de
+    'standard': standard,
   }],
   overlay: {
-    'Small Components': small_components
+    'hiking': hiking,
+    'bike': bike,
   },
   baselayer: {
-    one: streets,
-    two: outdoors,
-    three: satellite,
-    four: osm,
-    five: osm_de
+    one: standard,
   }
 };

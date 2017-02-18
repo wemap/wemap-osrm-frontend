@@ -77,7 +77,11 @@ var Control = L.Control.extend({
     var position = this._map.getCenter(),
       zoom = this._map.getZoom(),
       prec = 6;
-    window.open("https://map.project-osrm.org/debug/#" + zoom + "/" + position.lat.toFixed(prec) + "/" + position.lng.toFixed(prec));
+    window.open("https://routing2.openstreetmap.de/debug/" + this.profile.debug + ".html#" + zoom + "/" + position.lat.toFixed(prec) + "/" + position.lng.toFixed(prec));
+  },
+
+  setProfile: function(profile) {
+    this.profile = profile;
   },
 
   _openMapillary: function() {
