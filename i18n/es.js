@@ -8,5 +8,9 @@ module.exports = {
   'Select language': 'Seleccionar idioma',
   'Start - press enter to drop marker': 'Incio - presione enter para colocar el marcador',
   'End - press enter to drop marker': 'Fin - presione enter para colocar el marcador',
-  'Via point - press enter to drop marker': 'Punto en la vía - presione enter para colocar un marcador'
+  'Via point - press enter to drop marker': 'Punto en la vía - presione enter para colocar un marcador',
+  'Bike': 'Bicicleta',
+  'Car': 'Coche',
+  'Foot': 'Peatón',
+  'About': '<a href=/about.html>Sobre este servicio</a>'
 };

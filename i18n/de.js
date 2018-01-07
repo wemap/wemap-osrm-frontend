@@ -8,5 +8,9 @@ module.exports = {
   'Select language': 'Sprache auswählen',
   'Start - press enter to drop marker': 'Start - drücken um einen Marker zu plazieren',
   'End - press enter to drop marker': 'Ende - drücken um einen Marker zu plazieren',
-  'Via point - press enter to drop marker': 'Zwischenstop - drücken um einen Marker zu plazieren'
+  'Via point - press enter to drop marker': 'Zwischenstop - drücken um einen Marker zu plazieren',
+  'Bike': 'Fahrrad',
+  'Car': 'Auto',
+  'Foot': 'Fussgänger',
+  'About': '<a href=/about.html>Informationen zu diesem Service</a>'
 };

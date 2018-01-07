@@ -895,3 +895,15 @@ td.distance {
     margin-right: -400px !important;
     transition: 0.5s;
 }
+
+#profile-selector {
+    color: #ffffff;
+    background-color: rgba(37,72,127, 0.8);
+    border-radius: 4px;
+    border: 0;
+    width: 128px;
+    height: 40px;
+    margin-top: -3px;
+    padding-left: 6px;
+    padding-right: 6px;
+}

@@ -46,6 +46,9 @@ L.control.layers(mapLayer, overlay, {
 
 L.control.scale().addTo(map);
 
+/* set about text to attribution control */
+map.attributionControl.setPrefix(local['About'])
+
 /* Store User preferences */
 // store baselayer changes
 map.on('baselayerchange', function(e) {
@@ -151,6 +154,12 @@ var controlOptions = {
   routeDragInterval: options.lrm.routeDragInterval,
   collapsible: options.lrm.collapsible
 };
+// translate profile names
+for (var profile = 0, len = controlOptions.services.length; profile < len; profile++)
+{
+  controlOptions.services[profile].label = local[controlOptions.services[profile].label]
+}
+
 var router = (new L.Routing.OSRMv1(controlOptions));
 router._convertRouteOriginal = router._convertRoute;
 router._convertRoute = function(responseRoute) {

@@ -8,5 +8,9 @@ module.exports = {
   'Select language': 'Choisir la langue',
   'Start - press enter to drop marker': 'Point de départ',
   'End - press enter to drop marker': 'Étape intermédiaire',
-  'Via point - press enter to drop marker': 'Point d\'arrivée'
+  'Via point - press enter to drop marker': 'Point d\'arrivée',
+  'Bike': 'Vélo',
+  'Car': 'Voiture',
+  'Foot': 'Piéton',
+  'About': '<a href=/about.html>Sur ce service</a>'
 };
