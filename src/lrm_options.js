@@ -44,6 +44,7 @@ module.exports = {
     editorButtonClass: 'osrm-directions-icon osrm-editor-icon',
     josmButtonClass: 'osrm-directions-icon osrm-josm-icon',
     debugButtonClass: 'osrm-directions-icon osrm-debug-icon',
+    shareButtonClass: 'osrm-directions-icon osrm-share-icon',
     localizationChooserClass: 'osrm-localization-chooser',
     printButtonClass: 'osrm-directions-icon osrm-printer-icon',
     toolsContainerClass: 'fill-osrm dark',

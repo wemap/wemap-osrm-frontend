@@ -1,6 +1,7 @@
 'use strict';
 
 var L = require('leaflet');
+var shortlink = require('./shortlink');
 
 var Control = L.Control.extend({
   includes: L.Mixin.Events,
@@ -10,6 +11,7 @@ var Control = L.Control.extend({
     josmButtonClass: "",
     debugButtonClass: "",
     mapillaryButtonClass: "",
+    shareButtonClass: "",
     localizationChooserClass: ""
   },
 
@@ -28,6 +30,8 @@ var Control = L.Control.extend({
       debugButton,
       mapillaryContainer,
       mapillaryButton,
+      shareContainer,
+      shareButton,
       localizationButton,
       popupCloseButton,
       gpxContainer;
@@ -49,6 +53,11 @@ var Control = L.Control.extend({
     mapillaryButton = L.DomUtil.create('span', this.options.mapillaryButtonClass, mapillaryContainer);
     mapillaryButton.title = this._local['Open in Mapillary'];
     L.DomEvent.on(mapillaryButton, 'click', this._openMapillary, this);
+    shareContainer = L.DomUtil.create('div', 'leaflet-osrm-tools-share', this._container);
+    this._shareButton = L.DomUtil.create('span', this.options.shareButtonClass, shareContainer);
+    this._sharePopup = L.DomUtil.create('div', 'leaflet-osrm-tools-container share-popup', this._shareButton);
+    this._shareButton.title = this._local['Share Route'];
+    L.DomEvent.on(this._shareButton, 'click', this._showSharePopup, this);
     this._localizationContainer = L.DomUtil.create('div', 'leaflet-osrm-tools-localization', this._container);
     this._createLocalizationList(this._localizationContainer);
     return this._container;
@@ -89,6 +98,62 @@ var Control = L.Control.extend({
       zoom = this._map.getZoom(),
       prec = 6;
     window.open("https://www.mapillary.com/app/?lat=" + position.lat.toFixed(prec) + "&lng=" + position.lng.toFixed(prec) + "&z=" + zoom);
+  },
+
+  _showSharePopup: function() {
+    L.DomUtil.addClass(this._shareButton, 'share-popup-visible');
+    var overlay = L.DomUtil.create('div', 'share-overlay', this._sharePopup);
+    L.DomEvent.on(overlay, 'click', function(e) {
+      L.DomEvent.stopPropagation(e);
+      this._hideSharePopup();
+    }, this);
+    var container = L.DomUtil.create('div', 'share-container', this._sharePopup);
+    L.DomEvent.on(container, 'click', function(e) {
+      L.DomEvent.stopPropagation(e);
+    });
+    var typeButtonContainer = L.DomUtil.create('div', 'share-type-button-container', container);
+    var linkButton = L.DomUtil.create('button', 'share-type selected', typeButtonContainer);
+    linkButton.textContent = this._local['Link'];
+    var shortLinkButton = L.DomUtil.create('button', 'share-type', typeButtonContainer);
+    shortLinkButton.textContent = this._local['Shortlink'];
+    var input = L.DomUtil.create('input', 'share-url', container);
+    input.value = window.document.location.href;
+    input.select();
+
+    L.DomEvent.on(linkButton, 'click', function () {
+      if (!L.DomUtil.hasClass(linkButton, 'selected')) {
+        L.DomUtil.addClass(linkButton, 'selected');
+        L.DomUtil.removeClass(shortLinkButton, 'selected');
+        input.value = window.document.location.href;
+        input.select();
+      }
+    });
+    L.DomEvent.on(shortLinkButton, 'click', function () {
+      if (!L.DomUtil.hasClass(shortLinkButton, 'selected')) {
+        L.DomUtil.addClass(shortLinkButton, 'selected');
+        L.DomUtil.removeClass(linkButton, 'selected');
+        if (! this._shortLink) {
+          var url = window.document.location.href;
+          shortlink.osmli(url, L.Util.bind(function (shortLink) {
+            this._shortLink = shortLink;
+            input.value = this._shortLink;
+            input.select();
+          }, this));
+        }
+        else {
+          input.value = this._shortLink;
+          input.select();
+        }
+      }
+    }, this);
+  },
+
+  _hideSharePopup: function() {
+      this._shortLink = null;
+      L.DomUtil.removeClass(this._shareButton, 'share-popup-visible');
+      while (this._sharePopup.lastChild) {
+        this._sharePopup.removeChild(this._sharePopup.lastChild);
+      }
   },
 
   _updatePopupPosition: function(button) {

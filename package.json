@@ -32,13 +32,14 @@
     "uglify-js": "^2.8.0"
   },
   "dependencies": {
+    "corslite": "0.0.6",
     "jsonp": "^0.2.0",
-    "leaflet": "^0.7.7",
+    "leaflet": "~0.7.7",
     "leaflet-control-geocoder": "~1.2.1",
     "leaflet-routing-machine": "git+https://github.com/sosm/leaflet-routing-machine#b5690a3bc18686fa235e2d9e9d3069f70014a2a7",
-    "leaflet.locatecontrol": "^0.44.0",
+    "leaflet.locatecontrol": "~0.44.0",
     "local-storage": "^1.4.2",
-    "osrm-text-instructions": "~0.9.0",
+    "osrm-text-instructions": "~0.11.0",
     "qs": "^6.1.0"
   }
 }
