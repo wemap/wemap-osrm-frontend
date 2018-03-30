@@ -112,13 +112,17 @@ var Control = L.Control.extend({
       L.DomEvent.stopPropagation(e);
     });
     var typeButtonContainer = L.DomUtil.create('div', 'share-type-button-container', container);
-    var linkButton = L.DomUtil.create('button', 'share-type selected', typeButtonContainer);
+    var linkButton = L.DomUtil.create('button', 'share-type', typeButtonContainer);
     linkButton.textContent = this._local['Link'];
-    var shortLinkButton = L.DomUtil.create('button', 'share-type', typeButtonContainer);
+    var shortLinkButton = L.DomUtil.create('button', 'share-type selected', typeButtonContainer);
     shortLinkButton.textContent = this._local['Shortlink'];
     var input = L.DomUtil.create('input', 'share-url', container);
-    input.value = window.document.location.href;
-    input.select();
+    var url = window.document.location.href;
+    shortlink.osmli(url, L.Util.bind(function (shortLink) {
+      this._shortLink = shortLink;
+      input.value = this._shortLink;
+      input.select();
+    }, this));
 
     L.DomEvent.on(linkButton, 'click', function () {
       if (!L.DomUtil.hasClass(linkButton, 'selected')) {
