@@ -26,19 +26,16 @@ module.exports = {
     label: 'Car',
     path: '/routed-car/route/v1',
     debug: 'car',
-    fixspeed: 0
   },
   {
     label: 'Bike',
     path: '/routed-bike/route/v1',
     debug: 'bike',
-    fixspeed: 18
   },
   {
     label: 'Foot',
     path: '/routed-foot/route/v1',
     debug: 'foot',
-    fixspeed: 4.5
   }],
   layer: [{
     'openstreetmap.de': de,

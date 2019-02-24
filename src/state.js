@@ -40,8 +40,7 @@ var State = L.Class.extend({
     var self = this;
     L.setOptions(this, options);
     L.Util.setOptions(this._lrm.options.router, {
-        serviceUrl: this._lrm.options.router.options.services[this.options.service].path,
-        fixspeed: this._lrm.options.router.options.services[this.options.service].fixspeed});
+        serviceUrl: this._lrm.options.router.options.services[this.options.service].path});
     var profileSelector = L.DomUtil.get("profile-selector");
     profileSelector.selectedIndex = this.options.service;
     var services = self._lrm.options.router.options.services;
