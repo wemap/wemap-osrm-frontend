@@ -296,8 +296,8 @@
 
 .osrm-directions-icon {
     background-image: url('../images/osrm.toolbar.icons.svg');
-    -webkit-background-size: 146px 24px;
-    background-size: 170px 24px;
+    -webkit-background-size: 193px 24px;
+    background-size: 193px 24px;
     margin: 0;
     content: '';
     display: inline-block;
