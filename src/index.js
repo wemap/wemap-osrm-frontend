@@ -95,7 +95,6 @@ function makeIcon(i, n) {
     });
   }
 }
-
 var plan = new ReversablePlan([], {
   geocoder: L.Control.Geocoder.nominatim(),
   routeWhileDragging: true,
