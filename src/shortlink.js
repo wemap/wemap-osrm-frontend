@@ -1,4 +1,4 @@
-var corslite = require('corslite');
+var corslite = require('@mapbox/corslite');
 
 module.exports = {
   osmli: function(url, callback) {
