@@ -6,4 +6,7 @@
 # ensure that "COPY . /src" is referring to the repo root, not the directory
 # that contains the Dockerfile.
 # This script gets executed with a pwd of wherever the Dockerfile is.
-docker build -t $IMAGE_NAME -f Dockerfile ..
+DOCKER_IMAGE_NAME="wemap-osrm-frontend"
+DOCKER_IMAGE_TAG="$([ ! -z "$1" ] && echo $1 || echo $(git rev-parse --short HEAD))"
+cd docker
+docker build -t $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG -f Dockerfile ..

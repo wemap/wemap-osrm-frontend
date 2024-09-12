@@ -1,0 +1,104 @@
+name: CI/CD
+
+on: [push]
+
+##################################
+#  Global environment variables  #
+##################################
+env:
+  AWS_OWNER_ACCOUNT_ID: ${{ secrets.AWS_OWNER_ACCOUNT_ID }}
+  SLACK_HOOK_URL: ${{ secrets.SLACK_HOOK_URL }}
+  CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+  EB_APP_NAME: wemap-osrm-frontend
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+
+  deploy:
+    if: |
+      startsWith(github.ref_name, 'dev-') ||
+      startsWith(github.ref_name, 'prod-')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::${{secrets.AWS_OWNER_ACCOUNT_ID}}:role/wemap-osrm-frontend
+          role-session-name: wemap-osrm-frontend
+          aws-region: eu-west-1
+
+      - name: Install eb cli
+        run: |
+          pip install awsebcli --upgrade
+          echo "PATH=$PATH:/.local/bin" >> $GITHUB_ENV
+
+      - name: Setup Terragrunt
+        uses: autero1/action-terragrunt@v1.1.0
+        with:
+          terragrunt_version: 0.45.15
+
+      - name: Update infra
+        env:
+          CLOUDFLARE_DEV_ZONE_ID: ${{ secrets.CLOUDFLARE_DEV_ZONE_ID }}
+          CLOUDFLARE_PROD_ZONE_ID: ${{ secrets.CLOUDFLARE_PROD_ZONE_ID }}
+          ENVIRONMENT: ${{ github.ref_name }}
+        run: |
+          mkdir -p ~/.ssh; chmod go-rwx ~/.ssh
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          eval `ssh-agent -s`
+          ssh-add - <<< '${{ secrets.SSH_KEY_GITHUB_ACTIONS }}'
+          cd infra/terraform
+          ./manage_infra.sh --deploy
+
+      - name: Deploy to app to eb environment
+        env: 
+          ENVIRONMENT: ${{ github.ref_name }}
+        run: |
+          zip -r $EB_APP_NAME-artifact.zip . --symlinks --exclude ".github/*" ".vscode/*" "act/*" "infra/*" ".git/*" "settings/*"
+          eb deploy $EB_APP_NAME-$ENVIRONMENT --nohang
+
+  notify:
+    needs: 
+      - deploy
+    if: |
+      always() && 
+      (needs.deploy.result == 'success' || needs.deploy.result == 'failure')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Define branch and notification msg
+        if: always()
+        env:
+          WORKFLOW_STATUS: ${{ job.status }} ${{ needs.deploy.result }}
+        run: |   
+          if [[ "${{ github.ref_name }}" == *"prod"* ]]; then
+              echo "CHANNEL_TAG=<!channel>" >> $GITHUB_ENV
+              echo "SLACK_MSG="$(echo ${{ github.ref_name }} | cut -d "-" -f2-) profile has been deployed to PRODUCTION :rocket:"" >> $GITHUB_ENV
+          elif [[ ${{ github.ref_name }} == *"dev"* ]]; then
+              echo "ENVIRONMENT=DEVELOP" >> $GITHUB_ENV
+              echo "SLACK_MSG="$(echo ${{ github.ref_name }} | cut -d "-" -f2-) profile has been deployed to DEVELOP :rocket:"" >> $GITHUB_ENV
+          fi
+          echo "WORKFLOW_STATUS=success" >> $GITHUB_ENV
+          if ${{ contains(env.WORKFLOW_STATUS, 'failure') }}; then 
+            echo "WORKFLOW_STATUS=failure" >> $GITHUB_ENV
+            echo "SLACK_MSG= unable to deployed profile ${{ github.ref_name }} :x:" >> $GITHUB_ENV
+          fi
+
+      - name: Slack Notification
+        if: always()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_CHANNEL: deployments
+          SLACK_COLOR: ${{ env.WORKFLOW_STATUS }}
+          SLACK_ICON: https://s3-us-west-2.amazonaws.com/slack-files2/avatars/2022-10-11/4204602550962_14433d2bdcb7fb385ad2_72.png
+          SLACL_LINK_NAMES: true
+          SLACK_MESSAGE: "${{ env.CHANNEL_TAG }} ${{ github.event.head_commit.message }}"
+          SLACK_TITLE: ${{ env.EB_APP_NAME }} pipeline ${{ env.WORKFLOW_STATUS }} ! ${{ env.SLACK_MSG }}
+          SLACK_FOOTER: "Wemap notification system :love-wemap:"
+          SLACK_USERNAME: Wemap-sentinel
+          SLACK_WEBHOOK: ${{ secrets.SLACK_HOOK_URL }}

@@ -13,8 +13,10 @@ module.exports = {
   'Start - press enter to drop marker': 'Start - press enter to drop marker',
   'End - press enter to drop marker': 'End - press enter to drop marker',
   'Via point - press enter to drop marker': 'Via point - press enter to drop marker',
-  'Bike': 'Bike',
+  'Bike (fastest)': 'Bike (fastest)',
+  'Bike (safest)': 'Bike (safest)',
   'Car': 'Car',
   'Foot': 'Foot',
+  'Pmr': 'Pmr',
   'About': '<a href=/about.html>About this service and privacy policy</a>'
 };

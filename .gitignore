@@ -2,3 +2,7 @@ node_modules/
 *.swp
 bundle*raw*
 bundle*map
+**/.env
+settings/local/**
+**/.github-actions.conf
+**/event_payload.json

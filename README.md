@@ -60,9 +60,39 @@ In `src/leaflet_options.js` adjust:
 
 ```
 services: [{
-  label: 'Car (fastest)',
-  path: 'http://localhost:5000/route/v1'
-}],
+    label: 'Car',
+    path: 'https://routing-osrm-car.getwemap.com/route/v1',
+    debug: 'car',
+  },
+  {
+    label: 'Bike (fastest)',
+    path: 'https://routing-osrm-bicycle-fastest.getwemap.com/route/v1',
+    debug: 'bike-fastest',
+  },
+  {
+    label: 'Bike (safest)',
+    path: 'https://routing-osrm-bicycle-safest.getwemap.com/route/v1',
+    debug: 'bike-safest',
+  },
+  {
+    label: 'Foot',
+    path: 'https://routing-osrm-foot.getwemap.com/route/v1',
+    debug: 'foot',
+  },
+  {
+    label: 'Pmr',
+    path: 'https://routing-osrm-pmr.getwemap.com/route/v1',
+    debug: 'pmr',
+  }],
+```
+
+After adjusting services, add translations to `i18n/en.js` 
+```
+'Bike (fastest)': 'Bike (fastest)',
+'Bike (safest)': 'Bike (safest)',
+'Car': 'Car',
+'Foot': 'Foot',
+'Pmr': 'Pmr',
 ```
 
 For debug tiles showing speeds and small components available at `/debug` adjust in `debug/index.html`
@@ -73,3 +103,14 @@ For debug tiles showing speeds and small components available at `/debug` adjust
   "tiles" : ["http://localhost:5000/tile/v1/car/tile({x},{y},{z}).mvt"]
 }
 ```
+
+## Testing and Deployment
+
+To build a new docker image version, execute the build script from the root directory.
+
+```
+./docker/hooks/build MY_TAG_OR_LAST_SHORT_GIT_HASH
+```
+
+Deployment is done with github actions. The docker image is build on the fly at the same times as the deployment.
+Make your changes on prod-frontend branch then push to remote.

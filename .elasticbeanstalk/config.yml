@@ -1,0 +1,5 @@
+deploy:
+  artifact: wemap-osrm-frontend-artifact.zip
+global:
+  application_name: wemap-osrm-frontend
+  default_region: eu-west-1

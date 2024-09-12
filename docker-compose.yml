@@ -1,0 +1,9 @@
+version: "3"
+services:
+  osrm-frontend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    ports:
+      - "9966:9966"
+    entrypoint: npm start

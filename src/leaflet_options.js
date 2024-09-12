@@ -32,18 +32,28 @@ module.exports = {
   },
   services: [{
     label: 'Car',
-    path: 'https://routing.openstreetmap.de/routed-car/route/v1',
+    path: 'https://routing-osrm-car.getwemap.com/route/v1',
     debug: 'car',
   },
   {
-    label: 'Bike',
-    path: 'https://routing.openstreetmap.de/routed-bike/route/v1',
-    debug: 'bike',
+    label: 'Bike (fastest)',
+    path: 'https://routing-osrm-bicycle-fastest.getwemap.com/route/v1',
+    debug: 'bike-fastest',
+  },
+  {
+    label: 'Bike (safest)',
+    path: 'https://routing-osrm-bicycle-safest.getwemap.com/route/v1',
+    debug: 'bike-safest',
   },
   {
     label: 'Foot',
-    path: 'https://routing.openstreetmap.de/routed-foot/route/v1',
+    path: 'https://routing-osrm-foot.getwemap.com/route/v1',
     debug: 'foot',
+  },
+  {
+    label: 'Pmr',
+    path: 'https://routing-osrm-pmr.getwemap.com/route/v1',
+    debug: 'pmr',
   }],
   layer: [{
     'openstreetmap.de': osm_de,
