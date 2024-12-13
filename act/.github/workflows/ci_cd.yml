@@ -42,6 +42,10 @@ jobs:
         with:
           terragrunt_version: 0.45.15
 
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.9.8"
+
       - name: Update infra
         env:
           CLOUDFLARE_DEV_ZONE_ID: ${{ secrets.CLOUDFLARE_DEV_ZONE_ID }}
